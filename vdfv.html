@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aethera® - Cinematic Hero</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #FFFFFF;
+            --text-primary: #000000;
+            --text-secondary: #6F6F6F;
+            --font-display: 'Instrument Serif', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Animations */
+        @keyframes fade-rise {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-rise {
+            animation: fade-rise 0.8s ease-out forwards;
+        }
+
+        .animate-fade-rise-delay {
+            animation: fade-rise 0.8s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .animate-fade-rise-delay-2 {
+            animation: fade-rise 0.8s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+
+        /* Hero Container */
+        .hero-container {
+            position: relative;
+            min-height: 100vh;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* Video Background */
+        .video-background {
+            position: absolute;
+            inset: auto 0 0 0;
+            top: 300px;
+            width: 100%;
+            z-index: 0;
+        }
+
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Gradient Overlay */
+        .gradient-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, var(--bg-color), transparent, var(--bg-color));
+            z-index: 1;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 32px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.875rem;
+            letter-spacing: -0.025em;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo sup {
+            font-size: 0.5em;
+            vertical-align: super;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-item {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-item:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            color: var(--text-primary);
+        }
+
+        .nav-cta {
+            background-color: var(--text-primary);
+            color: #FFFFFF;
+            padding: 10px 24px;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .nav-cta:hover {
+            transform: scale(1.03);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            z-index: 10;
+            padding-top: calc(8rem - 75px);
+            padding-bottom: 10rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+
+        .hero-headline {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 400;
+            max-width: 1280px;
+            line-height: 0.95;
+            letter-spacing: -2.46px;
+            color: var(--text-primary);
+        }
+
+        .hero-headline em {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .hero-description {
+            font-size: clamp(1rem, 2vw, 1.125rem);
+            max-width: 640px;
+            margin-top: 32px;
+            line-height: 1.625;
+            color: var(--text-secondary);
+        }
+
+        .hero-cta {
+            display: inline-block;
+            background-color: var(--text-primary);
+            color: #FFFFFF;
+            padding: 20px 56px;
+            border-radius: 9999px;
+            font-size: 1rem;
+            margin-top: 48px;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .hero-cta:hover {
+            transform: scale(1.03);
+        }
+
+        /* Features Section */
+        .features-section {
+            position: relative;
+            z-index: 10;
+            padding: 100px 24px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 64px;
+            max-width: 800px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 48px;
+        }
+
+        .feature-card {
+            padding: 40px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--text-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: #FFFFFF;
+        }
+
+        .feature-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .feature-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.625;
+        }
+
+        /* Benefits Section */
+        .benefits-section {
+            position: relative;
+            z-index: 10;
+            padding: 100px 24px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 64px;
+            align-items: center;
+        }
+
+        .benefits-content {
+            max-width: 500px;
+        }
+
+        .benefits-list {
+            list-style: none;
+            margin-top: 40px;
+        }
+
+        .benefits-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .benefits-list svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--text-primary);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .benefits-list span {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .benefits-visual {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e5e5e5 100%);
+            border-radius: 32px;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Final CTA Section */
+        .final-cta-section {
+            position: relative;
+            z-index: 10;
+            padding: 120px 24px;
+            text-align: center;
+        }
+
+        .final-cta-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .final-cta-description {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 48px;
+            line-height: 1.625;
+        }
+
+        .final-cta-button {
+            display: inline-block;
+            background-color: var(--text-primary);
+            color: #FFFFFF;
+            padding: 20px 56px;
+            border-radius: 9999px;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .final-cta-button:hover {
+            transform: scale(1.03);
+        }
+
+        /* Footer */
+        .footer {
+            position: relative;
+            z-index: 10;
+            padding: 48px 24px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .footer-logo sup {
+            font-size: 0.5em;
+            vertical-align: super;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .footer-link {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: var(--text-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 24px;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-container">
+        <!-- Video Background -->
+        <div class="video-background">
+            <video id="heroVideo" muted playsinline>
+                <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_083109_283f3553-e28f-428b-a723-d639c617eb2b.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <!-- Gradient Overlay -->
+        <div class="gradient-overlay"></div>
+
+        <!-- Navigation -->
+        <nav class="navbar">
+            <a href="#" class="logo">Aethera<sup>®</sup></a>
+            <div class="nav-menu">
+                <a href="#" class="nav-item active">Home</a>
+                <a href="#features" class="nav-item">Studio</a>
+                <a href="#benefits" class="nav-item">About</a>
+                <a href="#" class="nav-item">Journal</a>
+                <a href="#cta" class="nav-item">Reach Us</a>
+                <a href="#cta" class="nav-cta">Begin Journey</a>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="hero-headline animate-fade-rise">
+                Beyond <em>silence,</em> we build <em>the eternal.</em>
+            </h1>
+            <p class="hero-description animate-fade-rise-delay">
+                Building platforms for brilliant minds, fearless makers, and thoughtful souls. Through the noise, we craft digital havens for deep work and pure flows.
+            </p>
+            <a href="#cta" class="hero-cta animate-fade-rise-delay-2">Begin Journey</a>
+        </section>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <p class="section-label">What We Do</p>
+        <h2 class="section-title">Crafting digital experiences that resonate</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
+                    </svg>
+                </div>
+                <h3 class="feature-title">Design Systems</h3>
+                <p class="feature-description">We build scalable design systems that ensure consistency and beauty across all digital touchpoints.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                </div>
+                <h3 class="feature-title">Development</h3>
+                <p class="feature-description">Clean, performant code that brings designs to life with precision and reliability.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" />
+                    </svg>
+                </div>
+                <h3 class="feature-title">Strategy</h3>
+                <p class="feature-description">Data-driven strategies that align your digital presence with business objectives.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits" class="benefits-section">
+        <div class="benefits-grid">
+            <div class="benefits-content">
+                <p class="section-label">Why Choose Us</p>
+                <h2 class="section-title">Built for those who demand excellence</h2>
+                <ul class="benefits-list">
+                    <li>
+                        <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                        <span>Pixel-perfect execution on every project</span>
+                    </li>
+                    <li>
+                        <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                        <span>Performance-optimized for speed and SEO</span>
+                    </li>
+                    <li>
+                        <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                        <span>Scalable architecture for future growth</span>
+                    </li>
+                    <li>
+                        <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                        <span>Dedicated support and maintenance</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="benefits-visual">
+                <svg width="120" height="120" fill="none" viewBox="0 0 24 24" stroke-width="0.5" style="opacity: 0.3;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section id="cta" class="final-cta-section">
+        <h2 class="final-cta-title">Ready to build something extraordinary?</h2>
+        <p class="final-cta-description">
+            Let's collaborate to create digital experiences that stand the test of time.
+        </p>
+        <a href="#" class="final-cta-button">Start Your Project</a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">Aethera<sup>®</sup></div>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Privacy</a>
+                <a href="#" class="footer-link">Terms</a>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Video fade-in/fade-out loop logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('heroVideo');
+            
+            if (!video) return;
+
+            const FADE_DURATION = 0.5; // seconds
+            
+            function updateVideoOpacity() {
+                if (!video.duration || isNaN(video.duration)) {
+                    requestAnimationFrame(updateVideoOpacity);
+                    return;
+                }
+
+                const currentTime = video.currentTime;
+                const duration = video.duration;
+                
+                let opacity = 1;
+                
+                // Fade in at start
+                if (currentTime < FADE_DURATION) {
+                    opacity = currentTime / FADE_DURATION;
+                }
+                // Fade out before end
+                else if (currentTime > duration - FADE_DURATION) {
+                    opacity = (duration - currentTime) / FADE_DURATION;
+                }
+                
+                video.style.opacity = Math.max(0, Math.min(1, opacity));
+                requestAnimationFrame(updateVideoOpacity);
+            }
+
+            video.addEventListener('play', function() {
+                requestAnimationFrame(updateVideoOpacity);
+            });
+
+            video.addEventListener('ended', function() {
+                video.style.opacity = 0;
+                setTimeout(function() {
+                    video.currentTime = 0;
+                    video.play();
+                }, 100);
+            });
+
+            // Start video
+            video.play().catch(function(e) {
+                console.log('Video autoplay prevented:', e);
+            });
+        });
+    </script>
+</body>
+</html>
